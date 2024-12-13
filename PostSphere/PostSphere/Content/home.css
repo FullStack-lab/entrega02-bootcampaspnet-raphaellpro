@@ -1,0 +1,36 @@
+﻿.home-page {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 50vh;
+	background-size: contain;
+	background-position: center;
+	background-image: url('../Content/Images/background-home.jpg');
+	color: white;
+	text-align: center;
+}
+
+.content {
+	background-color: rgba(0, 0, 0, 0.9);
+	padding: 40px;
+	border-radius: 8px;
+	max-width: 500px;
+	width: 90%;
+	position: relative;
+	z-index: 2;
+}
+
+h1 {
+	font-size: 2em;
+	margin-bottom: 10px;
+}
+
+p {
+	font-size: 1.2em;
+	margin-bottom: 20px;
+}
+
+.btn-primary {
+	padding: 10px 20px;
+	font-size: 1em;
+}
