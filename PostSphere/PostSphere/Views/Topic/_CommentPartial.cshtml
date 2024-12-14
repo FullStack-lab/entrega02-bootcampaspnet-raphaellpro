@@ -1,0 +1,18 @@
+﻿@model PostSphere.Models.Comment
+
+<li class="list-group-item">
+    <p>@Model.Text</p>
+    <small><strong>Por:</strong> @Model.Author | @Model.CreatedAt</small>
+    <div>
+        <a href="@Url.Action("Reply", "Topic", new { parentId = Model.Id })" class="btn btn-link btn-sm">Responder</a>
+    </div>
+    @if (Model.Replies != null && Model.Replies.Any())
+    {
+        <ul class="list-group mt-2">
+            @foreach (var reply in Model.Replies)
+            {
+                @Html.Partial("_CommentPartial", reply)
+            }
+        </ul>
+    }
+</li>

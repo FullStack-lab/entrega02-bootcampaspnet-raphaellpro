@@ -187,6 +187,7 @@
     <Content Include="Views\Topic\CreateTopic.cshtml" />
     <Content Include="Views\Topic\TopicDetail.cshtml" />
     <Content Include="Views\Topic\InteractiveRoom.cshtml" />
+    <Content Include="Views\Topic\_CommentPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
