@@ -20,5 +20,46 @@ namespace PostSphere.Controllers
         {
             return View(topics);
         }
+
+        // GET: Exibir formulário de criação
+        public ActionResult CreateTopic()
+        {
+            return View();
+        }
+
+        // POST: Salvar tópico
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateTopic(Topic topic)
+        {
+            if (ModelState.IsValid)
+            {
+                topic.Id = topics.Count + 1; // Simular auto-incremento
+                topic.CreatedAt = DateTime.Now;
+                topic.ReplyCount = 0; // Inicia sem respostas
+
+                // Reduz o texto para exibição na lista
+                topic.Text = topic.Text.Length > 100
+                    ? topic.Text.Substring(0, 100) + "..."
+                    : topic.Text;
+
+                topics.Add(topic);
+
+                // Redirecionar para os detalhes do tópico criado
+                return RedirectToAction("TopicDetail", new { id = topic.Id });
+            }
+
+            return View(topic);
+        }
+
+        // GET: Exibir detalhes do tópico
+        public ActionResult TopicDetail(int id)
+        {
+            var topic = topics.Find(t => t.Id == id);
+            if (topic == null)
+                return HttpNotFound();
+
+            return View(topic);
+        }
     }
 }
