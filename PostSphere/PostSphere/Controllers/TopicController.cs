@@ -169,5 +169,60 @@ namespace PostSphere.Controllers
             return FindMainTopicId(parentComment.ParentId.Value);
         }
 
+        private readonly ApplicationDbContext _context = new ApplicationDbContext();
+
+        // GET: Topic/DeleteComment/{id}
+        public ActionResult DeleteComment(int id)
+        {
+            var comment = _context.Comments.Include("Replies").SingleOrDefault(c => c.Id == id);
+            if (comment == null || comment.Author != User.Identity.Name)
+            {
+                return HttpNotFound();
+            }
+
+            return View(comment);
+        }
+
+        // POST: Topic/ConfirmDelete/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ConfirmDelete(int id)
+        {
+            var comment = _context.Comments.Include("Replies").SingleOrDefault(c => c.Id == id);
+            if (comment == null || comment.Author != User.Identity.Name)
+            {
+                return HttpNotFound();
+            }
+
+            // Excluir o comentário e seus filhos (respostas associadas)
+            DeleteCommentWithReplies(comment);
+
+            _context.SaveChanges();
+
+            // Redirecionamento conforme especificado
+            if (comment.ParentId == null) // Comentário principal (tópico)
+            {
+                return RedirectToAction("TopicList", "Topic");
+            }
+            else
+            {
+                var parentComment = _context.Comments.Find(comment.ParentId);
+                return RedirectToAction("InteractiveRoom", "Topic", new { id = parentComment.Id });
+            }
+        }
+
+        private void DeleteCommentWithReplies(Comment comment)
+        {
+            if (comment.Replies != null && comment.Replies.Any())
+            {
+                foreach (var reply in comment.Replies.ToList())
+                {
+                    DeleteCommentWithReplies(reply);
+                }
+            }
+
+            _context.Comments.Remove(comment);
+        }
+
     }
 }
