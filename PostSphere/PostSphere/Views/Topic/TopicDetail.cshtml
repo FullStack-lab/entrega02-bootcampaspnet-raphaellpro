@@ -1,0 +1,17 @@
+﻿@model PostSphere.Models.Topic
+
+@{
+    ViewBag.Title = "Detalhes do Tópico";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2>Detalhes do Tópico</h2>
+    <hr />
+    <p><strong>Título:</strong> @Model.Text</p>
+    <p><strong>Autor:</strong> @Model.Author</p>
+    <p><strong>Data de Criação:</strong> @Model.CreatedAt.ToString("g")</p>
+    <p><strong>Número de Respostas:</strong> @Model.ReplyCount</p>
+
+    <a href="@Url.Action("TopicList", "Topic")" class="btn btn-secondary">Voltar à Lista</a>
+</div>
