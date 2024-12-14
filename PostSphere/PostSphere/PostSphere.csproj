@@ -183,10 +183,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Comment\Index.cshtml" />
     <Content Include="Views\Comment\Create.cshtml" />
+    <Content Include="Views\Topic\TopicList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Topic\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

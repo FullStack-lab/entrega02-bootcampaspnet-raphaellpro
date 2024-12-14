@@ -1,0 +1,23 @@
+﻿@model IEnumerable<PostSphere.Models.Topic>
+
+@{
+    ViewBag.Title = "Lista de Tópicos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Lista de Tópicos</h2>
+    <div class="list-group">
+        @foreach (var topic in Model)
+        {
+            <a href="@Url.Action("TopicDetail", "Topic", new { id = topic.Id })" class="list-group-item list-group-item-action">
+                <div class="d-flex justify-content-between">
+                    <h5 class="mb-1">@topic.Title</h5>
+                    <small>@topic.CreatedAt.ToString("g")</small>
+                </div>
+                <p class="mb-1">Autor: @topic.Author</p>
+                <small>Respostas: @topic.ReplyCount</small>
+            </a>
+        }
+    </div>
+</div>
