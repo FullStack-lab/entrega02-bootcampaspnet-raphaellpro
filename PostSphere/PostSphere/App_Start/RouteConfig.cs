@@ -18,6 +18,19 @@ namespace PostSphere
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "SalaInterativa",
+                url: "comentarios",
+                defaults: new { controller = "Comment", action = "Index" }
+            );
+
+            routes.MapRoute(
+                name: "NewComment",
+                url: "comentarios/novo",
+                defaults: new { controller = "Comment", action = "Create" }
+            );
+
         }
     }
 }
