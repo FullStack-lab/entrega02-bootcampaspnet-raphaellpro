@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Xml.Linq;
 using PostSphere.Models;
+using System.Linq;
 
 namespace PostSphere.Controllers
 {
@@ -15,6 +16,8 @@ namespace PostSphere.Controllers
             new Topic { Id = 2, Title = "Sugestões de melhorias no layout", Author = "Carlos Lima", CreatedAt = DateTime.Now.AddDays(-1), ReplyCount = 7 },
             new Topic { Id = 3, Title = "Erro ao exportar relatório", Author = "Mariana Silva", CreatedAt = DateTime.Now.AddMinutes(-30), ReplyCount = 1 },
         };
+
+        private static List<Comment> _comments = new List<Comment>(); // Simulando banco de dados
 
         // Action para exibir a lista de tópicos
         public ActionResult TopicList()
