@@ -1,0 +1,24 @@
+﻿@model PostSphere.Models.Comment
+
+@{
+    ViewBag.Title = "Editar Comentário";
+}
+
+<div class="container mt-4">
+    <h2>Editar Comentário</h2>
+    <hr />
+    @using (Html.BeginForm("EditComment", "Topic", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id) <!-- Preserva o ID do comentário -->
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Text, "Texto do Comentário")
+            @Html.TextAreaFor(model => model.Text, new { @class = "form-control", rows = 5 })
+            @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
+        </div>
+
+        <button type="submit" class="btn btn-success">Salvar Edição</button>
+        <a href="javascript:history.back()" class="btn btn-secondary">Cancelar</a>
+    }
+</div>
