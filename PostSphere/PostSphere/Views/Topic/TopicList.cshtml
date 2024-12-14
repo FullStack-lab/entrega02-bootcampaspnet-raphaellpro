@@ -5,20 +5,43 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4">Lista de Tópicos</h2>
-    <a href="@Url.Action("CreateTopic", "Topic")" class="btn btn-primary">+ Novo Tópico</a>
-    <div class="list-group">
-        @foreach (var topic in Model)
-        {
-            <a href="@Url.Action("TopicDetail", "Topic", new { id = topic.Id })" class="list-group-item list-group-item-action">
-                <div class="d-flex justify-content-between">
-                    <h5 class="mb-1">@topic.Title</h5>
-                    <small>@topic.CreatedAt.ToString("g")</small>
-                </div>
-                <p class="mb-1">Autor: @topic.Author</p>
-                <small>Respostas: @topic.ReplyCount</small>
-            </a>
-        }
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Lista de Tópicos</h2>
+        <a href="@Url.Action("CreateTopic", "Topic")" class="btn btn-primary">+ Novo Tópico</a>
     </div>
+    <hr />
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Tópico</th>
+                    <th>Autor</th>
+                    <th>Data de Criação</th>
+                    <th>Respostas</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var topic in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("TopicDetail", "Topic", new { id = topic.Id })" class="text-decoration-none">
+                                @topic.Text
+                            </a>
+                        </td>
+                        <td>@topic.Author</td>
+                        <td>@topic.CreatedAt.ToString("g")</td>
+                        <td>@topic.ReplyCount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="alert alert-info">Nenhum tópico encontrado. Que tal criar o primeiro?</p>
+    }
 </div>
