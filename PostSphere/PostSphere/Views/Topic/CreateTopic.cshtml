@@ -1,0 +1,30 @@
+﻿@model PostSphere.Models.Topic
+
+@{
+    ViewBag.Title = "Criar Tópico";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2>Criar Novo Tópico</h2>
+    <hr />
+    @using (Html.BeginForm("CreateTopic", "Topic", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Text, "Texto do Comentário")
+            @Html.TextAreaFor(m => m.Text, 5, 50, new { @class = "form-control", @maxlength = "500" })
+            @Html.ValidationMessageFor(m => m.Text, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Author, "Nome do Autor")
+            @Html.TextBoxFor(m => m.Author, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Author, "", new { @class = "text-danger" })
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar Tópico</button>
+        <a href="@Url.Action("TopicList", "Topic")" class="btn btn-secondary">Voltar</a>
+    }
+</div>

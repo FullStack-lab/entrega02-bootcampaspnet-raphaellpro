@@ -184,6 +184,7 @@
     <Content Include="Views\Comment\Index.cshtml" />
     <Content Include="Views\Comment\Create.cshtml" />
     <Content Include="Views\Topic\TopicList.cshtml" />
+    <Content Include="Views\Topic\CreateTopic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
