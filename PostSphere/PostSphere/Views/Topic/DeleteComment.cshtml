@@ -1,0 +1,29 @@
+﻿@model PostSphere.Models.Comment
+
+@{
+    ViewBag.Title = "Confirmar Exclusão";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-danger">Confirmar Exclusão</h2>
+    <p>Você realmente deseja excluir o seguinte comentário?</p>
+
+    <blockquote class="blockquote">
+        <p>@Model.Text</p>
+        <footer class="blockquote-footer">Por @Model.Author em @Model.CreatedAt</footer>
+    </blockquote>
+
+    @if (Model.Replies != null && Model.Replies.Any())
+    {
+        <div class="alert alert-warning">
+            <strong>Aviso:</strong> Este comentário possui @Model.Replies.Count resposta(s), que também serão excluídas.
+        </div>
+    }
+
+    <form method="post" action="@Url.Action("ConfirmDelete", "Topic", new { id = Model.Id })">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+        <a href="javascript:history.back()" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
