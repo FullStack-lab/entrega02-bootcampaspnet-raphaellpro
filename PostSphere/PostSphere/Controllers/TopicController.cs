@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.Xml.Linq;
 using PostSphere.Models;
 
 namespace PostSphere.Controllers
@@ -60,6 +61,55 @@ namespace PostSphere.Controllers
                 return HttpNotFound();
 
             return View(topic);
+        }
+
+        // GET: InteractiveRoom (Página do Tópico)
+        public ActionResult InteractiveRoom(int id)
+        {
+            var topic = _comments.FirstOrDefault(c => c.Id == id && c.ParentId == null);
+            if (topic == null)
+                return HttpNotFound();
+
+            var replies = _comments.Where(c => c.ParentId == topic.Id).ToList();
+            topic.Replies = BuildCommentTree(topic.Id);
+
+            return View(topic);
+        }
+
+        // GET: Responder a Comentário
+        public ActionResult Reply(int parentId)
+        {
+            ViewBag.ParentId = parentId;
+            return View();
+        }
+
+        // POST: Salvar Resposta
+        [HttpPost]
+        public ActionResult Reply(Comment comment)
+        {
+            if (ModelState.IsValid)
+            {
+                comment.Id = _comments.Count + 1; // Simula auto incremento
+                _comments.Add(comment);
+                return RedirectToAction("InteractiveRoom", new { id = comment.ParentId });
+            }
+
+            return View(comment);
+        }
+
+        // Constrói a árvore de respostas hierárquicas
+        private List<Comment> BuildCommentTree(int parentId)
+        {
+            return _comments.Where(c => c.ParentId == parentId)
+                            .Select(c => new Comment
+                            {
+                                Id = c.Id,
+                                Text = c.Text,
+                                Author = c.Author,
+                                CreatedAt = c.CreatedAt,
+                                ParentId = c.ParentId,
+                                Replies = BuildCommentTree(c.Id)
+                            }).ToList();
         }
     }
 }
