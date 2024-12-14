@@ -1,0 +1,29 @@
+﻿@model PostSphere.Models.Comment
+
+@{
+    ViewBag.Title = "Interactive Room";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2>@Model.Text</h2>
+    <p><strong>Por:</strong> @Model.Author | <strong>Data:</strong> @Model.CreatedAt</p>
+    <hr />
+
+    <h4>Respostas</h4>
+    @if (Model.Replies != null && Model.Replies.Any())
+    {
+        <ul class="list-group">
+            @foreach (var reply in Model.Replies)
+            {
+                @Html.Partial("_CommentPartial", reply)
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Nenhuma resposta ainda. Seja o primeiro a comentar!</p>
+    }
+
+    <a href="@Url.Action("Reply", "Topic", new { parentId = Model.Id })" class="btn btn-primary mt-3">Responder</a>
+</div>

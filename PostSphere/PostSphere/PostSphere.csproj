@@ -186,6 +186,7 @@
     <Content Include="Views\Topic\TopicList.cshtml" />
     <Content Include="Views\Topic\CreateTopic.cshtml" />
     <Content Include="Views\Topic\TopicDetail.cshtml" />
+    <Content Include="Views\Topic\InteractiveRoom.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
