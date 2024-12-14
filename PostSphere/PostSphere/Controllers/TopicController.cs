@@ -114,5 +114,60 @@ namespace PostSphere.Controllers
                                 Replies = BuildCommentTree(c.Id)
                             }).ToList();
         }
+
+        // GET: Exibir formulário de edição de comentário
+        public ActionResult EditComment(int id)
+        {
+            // Localiza o comentário pelo ID
+            var comment = _comments.FirstOrDefault(c => c.Id == id);
+            if (comment == null)
+                return HttpNotFound();
+
+            return View(comment); // Passa o comentário para a View
+        }
+
+        // POST: Salvar edição do comentário
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditComment(Comment editedComment)
+        {
+            if (ModelState.IsValid)
+            {
+                // Localiza o comentário original na lista
+                var comment = _comments.FirstOrDefault(c => c.Id == editedComment.Id);
+                if (comment == null)
+                    return HttpNotFound();
+
+                // Atualiza apenas o texto
+                comment.Text = editedComment.Text;
+
+                // Redireciona para a página adequada
+                if (comment.ParentId == null)
+                {
+                    // Se for um comentário principal
+                    return RedirectToAction("InteractiveRoom", new { id = comment.Id });
+                }
+                else
+                {
+                    // Se for uma resposta, redireciona para o tópico principal
+                    var mainTopicId = FindMainTopicId(comment.ParentId.Value);
+                    return RedirectToAction("InteractiveRoom", new { id = mainTopicId });
+                }
+            }
+
+            return View(editedComment); // Retorna para edição em caso de erro
+        }
+
+        // Método auxiliar para encontrar o ID do tópico principal
+        private int FindMainTopicId(int parentId)
+        {
+            var parentComment = _comments.FirstOrDefault(c => c.Id == parentId);
+            if (parentComment == null || parentComment.ParentId == null)
+                return parentComment?.Id ?? parentId;
+
+            // Busca recursivamente até o comentário principal
+            return FindMainTopicId(parentComment.ParentId.Value);
+        }
+
     }
 }
