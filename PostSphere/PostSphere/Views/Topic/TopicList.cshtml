@@ -7,6 +7,7 @@
 
 <div class="container mt-4">
     <h2 class="mb-4">Lista de Tópicos</h2>
+    <a href="@Url.Action("CreateTopic", "Topic")" class="btn btn-primary">+ Novo Tópico</a>
     <div class="list-group">
         @foreach (var topic in Model)
         {
