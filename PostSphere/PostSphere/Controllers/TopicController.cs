@@ -12,12 +12,19 @@ namespace PostSphere.Controllers
         // Simulação de uma lista de tópicos
         private static List<Topic> topics = new List<Topic>
         {
-            new Topic { Id = 1, Title = "Problema com acesso ao sistema", Author = "Ana Souza", CreatedAt = DateTime.Now.AddHours(-5), ReplyCount = 3 },
+            new Topic { Id = 1, Text = "Problema com acesso ao sistema", Author = "Ana Souza", CreatedAt = DateTime.Now.AddHours(-5), ReplyCount = 3 },
             new Topic { Id = 2, Title = "Sugestões de melhorias no layout", Author = "Carlos Lima", CreatedAt = DateTime.Now.AddDays(-1), ReplyCount = 7 },
             new Topic { Id = 3, Title = "Erro ao exportar relatório", Author = "Mariana Silva", CreatedAt = DateTime.Now.AddMinutes(-30), ReplyCount = 1 },
         };
 
-        private static List<Comment> _comments = new List<Comment>(); // Simulando banco de dados
+        private static List<Comment> _comments = new List<Comment>
+         {
+            new Comment { Id = 1, ParentId = null, Author = "Ana", Text = "Primeiro comentário", CreatedAt = DateTime.Now },
+            new Comment { Id = 2, ParentId = 1, Author = "Carlos", Text = "Resposta ao primeiro comentário", CreatedAt = DateTime.Now },
+            new Comment { Id = 3, ParentId = 1, Author = "Mariana", Text = "Outra resposta", CreatedAt = DateTime.Now },
+            new Comment { Id = 4, ParentId = 2, Author = "Ana", Text = "Resposta aninhada", CreatedAt = DateTime.Now }
+        }; // Simulando banco de dados
+
 
         // Action para exibir a lista de tópicos
         public ActionResult TopicList()
@@ -169,12 +176,10 @@ namespace PostSphere.Controllers
             return FindMainTopicId(parentComment.ParentId.Value);
         }
 
-        private readonly ApplicationDbContext _context = new ApplicationDbContext();
-
         // GET: Topic/DeleteComment/{id}
         public ActionResult DeleteComment(int id)
         {
-            var comment = _context.Comments.Include("Replies").SingleOrDefault(c => c.Id == id);
+            var comment = FindCommentById(id);
             if (comment == null || comment.Author != User.Identity.Name)
             {
                 return HttpNotFound();
@@ -188,40 +193,43 @@ namespace PostSphere.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ConfirmDelete(int id)
         {
-            var comment = _context.Comments.Include("Replies").SingleOrDefault(c => c.Id == id);
+            var comment = FindCommentById(id);
             if (comment == null || comment.Author != User.Identity.Name)
             {
                 return HttpNotFound();
             }
 
-            // Excluir o comentário e seus filhos (respostas associadas)
+            // Excluir o comentário e suas respostas associadas
             DeleteCommentWithReplies(comment);
 
-            _context.SaveChanges();
-
-            // Redirecionamento conforme especificado
+            // Redirecionamento
             if (comment.ParentId == null) // Comentário principal (tópico)
             {
                 return RedirectToAction("TopicList", "Topic");
             }
             else
             {
-                var parentComment = _context.Comments.Find(comment.ParentId);
+                var parentComment = FindCommentById(comment.ParentId.Value);
                 return RedirectToAction("InteractiveRoom", "Topic", new { id = parentComment.Id });
             }
         }
 
+        // Método para buscar um comentário pelo ID
+        private Comment FindCommentById(int id)
+        {
+            return _comments.SingleOrDefault(c => c.Id == id);
+        }
+
+        // Método para excluir um comentário e suas respostas associadas
         private void DeleteCommentWithReplies(Comment comment)
         {
-            if (comment.Replies != null && comment.Replies.Any())
+            var replies = _comments.Where(c => c.ParentId == comment.Id).ToList();
+            foreach (var reply in replies)
             {
-                foreach (var reply in comment.Replies.ToList())
-                {
-                    DeleteCommentWithReplies(reply);
-                }
+                DeleteCommentWithReplies(reply); // Exclusão recursiva
             }
 
-            _context.Comments.Remove(comment);
+            _comments.Remove(comment); // Remover o comentário atual
         }
 
     }
