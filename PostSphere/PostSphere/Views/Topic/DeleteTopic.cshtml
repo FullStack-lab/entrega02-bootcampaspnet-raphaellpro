@@ -1,0 +1,19 @@
+﻿@model PostSphere.Models.Topic
+
+@{
+    ViewBag.Title = "Confirmar Exclusão de Tópico";
+}
+
+<div class="container mt-5">
+    <h2 class="text-danger">Confirmar Exclusão</h2>
+    <p>Você realmente deseja excluir o seguinte tópico?</p>
+
+    <blockquote class="blockquote">
+        <p>@Model.Text</p>
+        <footer class="blockquote-footer">Por @Model.Author em @Model.CreatedAt</footer>
+    </blockquote>
+
+    <form method="get" action="@Url.Action("TopicList", "Topic")">
+        <button type="submit" class="btn btn-secondary">Cancelar</button>
+    </form>
+</div>
