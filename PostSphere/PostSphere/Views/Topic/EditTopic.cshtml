@@ -1,0 +1,24 @@
+﻿@model PostSphere.Models.Topic
+
+@{
+    ViewBag.Title = "Editar Tópico";
+}
+
+<div class="container mt-4">
+    <h2>Editar Tópico</h2>
+    <hr />
+    @using (Html.BeginForm("EditTopic", "Topic", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id) <!-- Preserva o ID do tópico -->
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Text, "Texto do Tópico")
+            @Html.TextAreaFor(model => model.Text, new { @class = "form-control", rows = 5 })
+            @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
+        </div>
+
+        <button type="submit" class="btn btn-success">Salvar Edição</button>
+        <a href="@Url.Action("TopicList", "Topic")" class="btn btn-secondary">Cancelar</a>
+    }
+</div>
