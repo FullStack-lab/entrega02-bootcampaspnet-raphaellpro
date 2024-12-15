@@ -190,6 +190,8 @@
     <Content Include="Views\Topic\Reply.cshtml" />
     <Content Include="Views\Topic\EditComment.cshtml" />
     <Content Include="Views\Topic\DeleteComment.cshtml" />
+    <Content Include="Views\Topic\EditTopic.cshtml" />
+    <Content Include="Views\Topic\DeleteTopic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

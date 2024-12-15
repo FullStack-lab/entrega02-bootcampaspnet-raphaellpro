@@ -89,6 +89,46 @@ namespace PostSphere.Controllers
             return View(topic);
         }
 
+        // GET: Exibir formulário de edição do tópico
+        public ActionResult EditTopic(int id)
+        {
+            var topic = topics.FirstOrDefault(t => t.Id == id);
+            if (topic == null)
+                return HttpNotFound();
+
+            return View(topic);
+        }
+
+        // POST: Salvar edição do tópico
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditTopic(Topic editedTopic)
+        {
+            if (ModelState.IsValid)
+            {
+                var topic = topics.FirstOrDefault(t => t.Id == editedTopic.Id);
+                if (topic == null)
+                    return HttpNotFound();
+
+                topic.Text = editedTopic.Text;
+                topic.Author = editedTopic.Author; // Atualiza dados básicos
+                return RedirectToAction("TopicList");
+            }
+
+            return View(editedTopic);
+        }
+
+        // GET: Confirmar exclusão do tópico (apenas visualização por enquanto)
+        public ActionResult DeleteTopic(int id)
+        {
+            var topic = topics.FirstOrDefault(t => t.Id == id);
+            if (topic == null)
+                return HttpNotFound();
+
+            return View(topic);
+        }
+
+
         // GET: InteractiveRoom (Página do Tópico)
         public ActionResult InteractiveRoom(int id)
         {
