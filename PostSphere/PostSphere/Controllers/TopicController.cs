@@ -76,15 +76,27 @@ namespace PostSphere.Controllers
         // GET: InteractiveRoom (Página do Tópico)
         public ActionResult InteractiveRoom(int id)
         {
-            var topic = _comments.FirstOrDefault(c => c.Id == id && c.ParentId == null);
+            // Buscar o tópico pelo ID
+            var topic = topics.FirstOrDefault(t => t.Id == id);
             if (topic == null)
-                return HttpNotFound();
+                return HttpNotFound(); // Retorna erro 404 se o tópico não existir
 
-            var replies = _comments.Where(c => c.ParentId == topic.Id).ToList();
-            topic.Replies = BuildCommentTree(topic.Id);
+            // Buscar comentários relacionados ao tópico
+            var replies = _comments.Where(c => c.ParentId == id).ToList();
 
-            return View(topic);
+            // Criar um modelo combinado para a View
+            var model = new Comment
+            {
+                Id = topic.Id, // O ID do tópico será usado aqui
+                Text = topic.Text,
+                Author = topic.Author,
+                CreatedAt = topic.CreatedAt,
+                Replies = replies // Lista de respostas ao tópico principal
+            };
+
+            return View(model); // Retorna a View com o modelo combinado
         }
+
 
         // GET: Responder a Comentário
         public ActionResult Reply(int parentId)

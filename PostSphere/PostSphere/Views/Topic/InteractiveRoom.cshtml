@@ -6,10 +6,15 @@
 }
 
 <div class="container mt-5">
-    <h2>@Model.Text</h2>
-    <p><strong>Por:</strong> @Model.Author | <strong>Data:</strong> @Model.CreatedAt</p>
+    <!-- Exibe o tópico principal -->
+    <div class="alert alert-primary">
+        <h2>@Model.Text</h2>
+        <p><strong>Por:</strong> @Model.Author | <strong>Data:</strong> @Model.CreatedAt</p>
+    </div>
+
     <hr />
 
+    <!-- Exibe respostas, se existirem -->
     <h4>Respostas</h4>
     @if (Model.Replies != null && Model.Replies.Any())
     {
@@ -22,8 +27,9 @@
     }
     else
     {
-        <p>Nenhuma resposta ainda. Seja o primeiro a comentar!</p>
+        <p class="text-muted">Nenhuma resposta ainda. Seja o primeiro a comentar!</p>
     }
 
+    <!-- Link para responder -->
     <a href="@Url.Action("Reply", "Topic", new { parentId = Model.Id })" class="btn btn-primary mt-3">Responder</a>
 </div>
