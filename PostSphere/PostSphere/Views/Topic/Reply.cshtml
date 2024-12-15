@@ -9,6 +9,7 @@
     @using (Html.BeginForm())
     {
         @Html.HiddenFor(m => m.ParentId)
+        @Html.HiddenFor(m => m.TopicId) <!-- Campo oculto para o ID do tópico -->
 
         <div class="form-group">
             @Html.Label("Autor")

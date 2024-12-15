@@ -6,6 +6,7 @@ namespace PostSphere.Models
     public class Comment
     {
         public int Id { get; set; } // ID do comentário
+        public int TopicId { get; set; } // ID do tópico ao qual o comentário pertence
         public string Text { get; set; } // Texto do comentário
         public string Author { get; set; } // Nome do autor
         public DateTime CreatedAt { get; set; } // Data de criação

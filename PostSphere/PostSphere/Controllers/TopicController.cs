@@ -25,6 +25,22 @@ namespace PostSphere.Controllers
             new Comment { Id = 4, ParentId = 2, Author = "Ana", Text = "Resposta aninhada", CreatedAt = DateTime.Now }
         }; // Simulando banco de dados
 
+        // Constrói a árvore de respostas hierárquicas
+        private List<Comment> BuildCommentTree(int topicId, int? parentId = null)
+        {
+            return _comments
+                .Where(c => c.TopicId == topicId && c.ParentId == parentId)
+                .Select(c => new Comment
+                {
+                    Id = c.Id,
+                    Text = c.Text,
+                    Author = c.Author,
+                    CreatedAt = c.CreatedAt,
+                    ParentId = c.ParentId,
+                    Replies = BuildCommentTree(topicId, c.Id) // Chamado recursivamente
+                }).ToList();
+        }
+
 
         // Action para exibir a lista de tópicos
         public ActionResult TopicList()
@@ -81,8 +97,8 @@ namespace PostSphere.Controllers
             if (topic == null)
                 return HttpNotFound(); // Retorna erro 404 se o tópico não existir
 
-            // Buscar comentários relacionados ao tópico
-            var replies = _comments.Where(c => c.ParentId == id).ToList();
+            // Busca comentários relacionados ao tópico
+            var replies = _comments.Where(c => c.TopicId == id && c.ParentId == null).ToList();
 
             // Criar um modelo combinado para a View
             var model = new Comment
@@ -91,7 +107,7 @@ namespace PostSphere.Controllers
                 Text = topic.Text,
                 Author = topic.Author,
                 CreatedAt = topic.CreatedAt,
-                Replies = replies // Lista de respostas ao tópico principal
+                Replies = BuildCommentTree(id) // Lista de respostas ao tópico principal
             };
 
             return View(model); // Retorna a View com o modelo combinado
@@ -99,9 +115,13 @@ namespace PostSphere.Controllers
 
 
         // GET: Responder a Comentário
-        public ActionResult Reply(int parentId)
+        public ActionResult Reply(int? parentId, int topicId)
         {
+            if (!parentId.HasValue)
+                parentId = 0;
+
             ViewBag.ParentId = parentId;
+            ViewBag.TopicId = topicId; // Envia o ID do tópico atual
             return View();
         }
 
@@ -111,27 +131,37 @@ namespace PostSphere.Controllers
         {
             if (ModelState.IsValid)
             {
-                comment.Id = _comments.Count + 1; // Simula auto incremento
+                // Caso ParentId seja nulo, o comentário é uma resposta direta ao tópico
+                if (comment.ParentId == null)
+                {
+                    // Verificar se TopicId foi passado
+                    if (comment.TopicId == 0)
+                        return HttpNotFound("Erro: TopicId inválido.");
+                }
+                else
+                {
+                    // Se for uma resposta, herdar o TopicId do comentário pai
+                    var parentComment = _comments.FirstOrDefault(c => c.Id == comment.ParentId);
+                    if (parentComment != null)
+                    {
+                        comment.TopicId = parentComment.TopicId;
+                    }
+                    else
+                    {
+                        return HttpNotFound("Comentário pai não encontrado.");
+                    }
+                }
+
+                // Adicionar o comentário
+                comment.Id = _comments.Count + 1; // Simula auto-incremento
+                comment.CreatedAt = DateTime.Now;
                 _comments.Add(comment);
-                return RedirectToAction("InteractiveRoom", new { id = comment.ParentId });
+
+                return RedirectToAction("InteractiveRoom", new { id = comment.TopicId });
             }
 
+            // Retorna a view com erros de validação
             return View(comment);
-        }
-
-        // Constrói a árvore de respostas hierárquicas
-        private List<Comment> BuildCommentTree(int parentId)
-        {
-            return _comments.Where(c => c.ParentId == parentId)
-                            .Select(c => new Comment
-                            {
-                                Id = c.Id,
-                                Text = c.Text,
-                                Author = c.Author,
-                                CreatedAt = c.CreatedAt,
-                                ParentId = c.ParentId,
-                                Replies = BuildCommentTree(c.Id)
-                            }).ToList();
         }
 
         // GET: Exibir formulário de edição de comentário

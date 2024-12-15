@@ -12,10 +12,12 @@ namespace PostSphere
 
             // Rotas específicas para comentários
             routes.MapRoute(
-                name: "CommentList", // Listar comentários
-                url: "comentarios",
-                defaults: new { controller = "Topic", action = "InteractiveRoom" }
+                name: "CommentList",
+                url: "comentarios/{id}",
+                defaults: new { controller = "Topic", action = "InteractiveRoom" },
+                constraints: new { id = @"\d+" } // O ID deve ser numérico
             );
+
 
             routes.MapRoute(
                 name: "NewComment", // Criar novo comentário

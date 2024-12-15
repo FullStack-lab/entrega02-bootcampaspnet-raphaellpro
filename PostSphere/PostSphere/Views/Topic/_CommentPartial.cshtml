@@ -5,7 +5,7 @@
     <small><strong>Por:</strong> @Model.Author | @Model.CreatedAt</small>
     <div>
         <!-- Botão Responder -->
-        <a href="@Url.Action("Reply", "Topic", new { parentId = Model.Id })" class="btn btn-link btn-sm">Responder</a>
+        <a href="@Url.Action("Reply", "Topic", new { parentId = Model.Id, topicId = ViewData["TopicId"] })" class="btn btn-link btn-sm">Responder</a>
 
         <!-- Botão Editar -->
         <a href="@Url.Action("EditComment", "Topic", new { id = Model.Id })" class="btn btn-link btn-sm text-warning">Editar</a>
@@ -19,7 +19,7 @@
         <ul class="list-group mt-2">
             @foreach (var reply in Model.Replies)
             {
-                @Html.Partial("_CommentPartial", reply)
+                Html.RenderPartial("_CommentPartial", reply, new ViewDataDictionary { { "TopicId", ViewData["TopicId"] } });
             }
         </ul>
     }

@@ -21,7 +21,7 @@
         <ul class="list-group">
             @foreach (var reply in Model.Replies)
             {
-                @Html.Partial("_CommentPartial", reply)
+                Html.RenderPartial("_CommentPartial", reply, new ViewDataDictionary { { "TopicId", Model.Id } });
             }
         </ul>
     }
@@ -31,5 +31,5 @@
     }
 
     <!-- Link para responder -->
-    <a href="@Url.Action("Reply", "Topic", new { parentId = Model.Id })" class="btn btn-primary mt-3">Responder</a>
+<a href="@Url.Action("Reply", "Topic", new { parentId = (int?)null, topicId = Model.Id })" class="btn btn-primary mt-3">Responder</a>
 </div>
