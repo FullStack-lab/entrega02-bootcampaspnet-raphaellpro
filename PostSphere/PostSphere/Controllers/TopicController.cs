@@ -153,7 +153,7 @@ namespace PostSphere.Controllers
                 }
 
                 // Adicionar o comentário
-                comment.Id = _comments.Count + 1; // Simula auto-incremento
+                comment.Id = GenerateUniqueCommentId();
                 comment.CreatedAt = DateTime.Now;
                 _comments.Add(comment);
 
@@ -242,8 +242,29 @@ namespace PostSphere.Controllers
         // Método para buscar um comentário pelo ID
         private Comment FindCommentById(int id)
         {
-            return _comments.SingleOrDefault(c => c.Id == id);
+            var matchingComments = _comments.Where(c => c.Id == id).ToList();
+
+            if (matchingComments.Count > 1)
+            {
+                throw new InvalidOperationException($"Mais de um comentário encontrado com o ID {id}.");
+            }
+
+            return matchingComments.FirstOrDefault();
         }
+
+        private int GenerateUniqueCommentId()
+        {
+            int newId = _comments.Count + 1;
+
+            // Garante que o novo ID seja único
+            while (_comments.Any(c => c.Id == newId))
+            {
+                newId++;
+            }
+
+            return newId;
+        }
+
 
         // Método para excluir um comentário e suas respostas associadas
         private void DeleteCommentWithReplies(Comment comment)
