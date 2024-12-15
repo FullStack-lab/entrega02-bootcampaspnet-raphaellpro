@@ -1,15 +1,17 @@
 ﻿@model PostSphere.Models.Comment
 
+@{ var topicId = ViewData["TopicId"] ?? 0; }
+
 <li class="list-group-item">
     <p>@Model.Text</p>
     <small><strong>Por:</strong> @Model.Author | @Model.CreatedAt</small>
     <div>
         <!-- Botão Responder -->
-        <a href="@Url.Action("Reply", "Topic", new { parentId = Model.Id, topicId = ViewData["TopicId"] })" class="btn btn-link btn-sm">Responder</a>
+        <a href="@Url.Action("Reply", "Topic", new { parentId = Model.Id, topicId = topicId })" class="btn btn-link btn-sm">Responder</a>
 
         <!-- Botão Editar -->
         <a href="@Url.Action("EditComment", "Topic", new { id = Model.Id })" class="btn btn-link btn-sm text-warning">Editar</a>
-        
+
         <!-- Botão Excluir -->
         <a href="@Url.Action("DeleteComment", "Topic", new { id = Model.Id })" class="btn btn-link btn-sm text-danger">Excluir</a>
     </div>
@@ -19,7 +21,7 @@
         <ul class="list-group mt-2">
             @foreach (var reply in Model.Replies)
             {
-                Html.RenderPartial("_CommentPartial", reply, new ViewDataDictionary { { "TopicId", ViewData["TopicId"] } });
+                Html.RenderPartial("_CommentPartial", reply, new ViewDataDictionary { { "TopicId", topicId } });
             }
         </ul>
     }

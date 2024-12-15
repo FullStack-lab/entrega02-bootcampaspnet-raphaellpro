@@ -187,36 +187,27 @@ namespace PostSphere.Controllers
                 if (comment == null)
                     return HttpNotFound();
 
-                // Atualiza apenas o texto
+                // Atualiza o texto do comentário
                 comment.Text = editedComment.Text;
 
-                // Redireciona para a página adequada
-                if (comment.ParentId == null)
-                {
-                    // Se for um comentário principal
-                    return RedirectToAction("InteractiveRoom", new { id = comment.Id });
-                }
-                else
-                {
-                    // Se for uma resposta, redireciona para o tópico principal
-                    var mainTopicId = FindMainTopicId(comment.ParentId.Value);
-                    return RedirectToAction("InteractiveRoom", new { id = mainTopicId });
-                }
+                // Redireciona sempre para a página do tópico relacionado
+                return RedirectToAction("InteractiveRoom", new { id = comment.TopicId });
             }
 
-            return View(editedComment); // Retorna para edição em caso de erro
+            return View(editedComment); // Retorna à view de edição se houver erros
         }
+
 
         // Método auxiliar para encontrar o ID do tópico principal
         private int FindMainTopicId(int parentId)
         {
             var parentComment = _comments.FirstOrDefault(c => c.Id == parentId);
-            if (parentComment == null || parentComment.ParentId == null)
-                return parentComment?.Id ?? parentId;
+            if (parentComment == null)
+                throw new InvalidOperationException("Comentário pai não encontrado.");
 
-            // Busca recursivamente até o comentário principal
-            return FindMainTopicId(parentComment.ParentId.Value);
+            return parentComment.TopicId; // Retorna diretamente o ID do tópico associado
         }
+
 
         // GET: Topic/DeleteComment/{id}
         public ActionResult DeleteComment(int id)
