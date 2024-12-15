@@ -6,7 +6,6 @@ namespace PostSphere.Models
     public class Topic
     {
         public int Id { get; set; } // Identificador único
-        public string Title { get; set; } // Título resumido do comentário principal
 
         [Required(ErrorMessage = "O título é obrigatório")]
         [StringLength(500, ErrorMessage = "O comentário pode ter no máximo 500 caracteres.")]
