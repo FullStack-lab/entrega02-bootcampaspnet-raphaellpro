@@ -213,12 +213,12 @@ namespace PostSphere.Controllers
         public ActionResult DeleteComment(int id)
         {
             var comment = FindCommentById(id);
-            if (comment == null || comment.Author != User.Identity.Name)
+            if (comment == null)
             {
                 return HttpNotFound();
             }
 
-            return View(comment);
+            return View(comment); // Exibe a página de confirmação
         }
 
         // POST: Topic/ConfirmDelete/{id}
@@ -227,7 +227,7 @@ namespace PostSphere.Controllers
         public ActionResult ConfirmDelete(int id)
         {
             var comment = FindCommentById(id);
-            if (comment == null || comment.Author != User.Identity.Name)
+            if (comment == null)
             {
                 return HttpNotFound();
             }
@@ -235,16 +235,8 @@ namespace PostSphere.Controllers
             // Excluir o comentário e suas respostas associadas
             DeleteCommentWithReplies(comment);
 
-            // Redirecionamento
-            if (comment.ParentId == null) // Comentário principal (tópico)
-            {
-                return RedirectToAction("TopicList", "Topic");
-            }
-            else
-            {
-                var parentComment = FindCommentById(comment.ParentId.Value);
-                return RedirectToAction("InteractiveRoom", "Topic", new { id = parentComment.Id });
-            }
+            // Redireciona para a página do tópico relacionado
+            return RedirectToAction("InteractiveRoom", "Topic", new { id = comment.TopicId });
         }
 
         // Método para buscar um comentário pelo ID
