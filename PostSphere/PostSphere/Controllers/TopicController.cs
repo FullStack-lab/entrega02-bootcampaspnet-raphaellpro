@@ -41,6 +41,10 @@ namespace PostSphere.Controllers
                 }).ToList();
         }
 
+        // Variáveis para controle de IDs únicos
+        private static int lastTopicId = 3; // Deve ser o maior ID existente na lista de tópicos
+        private static int lastCommentId = 4; // Deve ser o maior ID existente na lista de comentários
+
 
         // Action para exibir a lista de tópicos
         public ActionResult TopicList()
@@ -61,7 +65,7 @@ namespace PostSphere.Controllers
         {
             if (ModelState.IsValid)
             {
-                topic.Id = topics.Count + 1; // Simular auto-incremento
+                topic.Id = ++lastTopicId; // Simular auto-incremento
                 topic.CreatedAt = DateTime.Now;
                 topic.ReplyCount = 0; // Inicia sem respostas
 
@@ -330,7 +334,7 @@ namespace PostSphere.Controllers
                 newId++;
             }
 
-            return newId;
+            return ++lastCommentId;
         }
 
 
