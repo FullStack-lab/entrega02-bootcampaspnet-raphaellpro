@@ -8,7 +8,7 @@
         @Model.Text
     </div>
     <small><strong>Por:</strong> @Model.Author | @Model.CreatedAt</small>
-    <div>
+    <div class="mt-3">
         <!-- Botão Responder -->
         <a href="@Url.Action("Reply", "Topic", new { parentId = Model.Id, topicId = topicId })" class="btn btn-sm text-bg-success">Responder</a>
 
