@@ -18,7 +18,9 @@
             @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
         </div>
 
-        <button type="submit" class="btn btn-success">Salvar Edição</button>
-        <a href="@Url.Action("TopicList", "Topic")" class="btn btn-secondary">Cancelar</a>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-success">Salvar Edição</button>
+            <a href="@Url.Action("TopicList", "Topic")" class="btn btn-secondary">Cancelar</a>
+        </div>
     }
 </div>

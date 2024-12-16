@@ -20,7 +20,7 @@
 
     <form method="post" action="@Url.Action("ConfirmDeleteTopic", "Topic", new { id = Model.Id })">
         @Html.AntiForgeryToken()
-        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
-        <a href="@Url.Action("TopicList", "Topic")" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-danger mt-3">Confirmar Exclusão</button>
+        <a href="@Url.Action("TopicList", "Topic")" class="btn btn-secondary mt-3">Cancelar</a>
     </form>
 </div>
