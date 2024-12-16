@@ -11,6 +11,10 @@
         <h2>@Model.Text</h2>
         <p><strong>Por:</strong> @Model.Author | <strong>Data:</strong> @Model.CreatedAt</p>
     </div>
+    <div>
+        <!-- Link para responder -->
+        <a href="@Url.Action("Reply", "Topic", new { parentId = (int?)null, topicId = Model.Id })" class="btn btn-primary mt-3">Responder</a>
+    </div>
 
     <hr />
 
@@ -30,6 +34,4 @@
         <p class="text-muted">Nenhuma resposta ainda. Seja o primeiro a comentar!</p>
     }
 
-    <!-- Link para responder -->
-<a href="@Url.Action("Reply", "Topic", new { parentId = (int?)null, topicId = Model.Id })" class="btn btn-primary mt-3">Responder</a>
 </div>

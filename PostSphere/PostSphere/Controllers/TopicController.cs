@@ -93,6 +93,31 @@ namespace PostSphere.Controllers
             return View(topic);
         }
 
+        // GET: Exibir detalhes de um comentário específico
+        public ActionResult CommentDetail(int id)
+        {
+            // Localizar o comentário pelo ID
+            var comment = _comments.FirstOrDefault(c => c.Id == id);
+            if (comment == null)
+                return HttpNotFound();
+
+            // Construir a árvore de respostas do comentário
+            var replies = BuildCommentTree(comment.TopicId, id);
+
+            // Modelo combinado para a View
+            var model = new Comment
+            {
+                Id = comment.Id,
+                Text = comment.Text,
+                Author = comment.Author,
+                CreatedAt = comment.CreatedAt,
+                Replies = replies // Respostas diretas ao comentário
+            };
+
+            return View(model);
+        }
+
+
         // GET: Exibir formulário de edição do tópico
         public ActionResult EditTopic(int id)
         {

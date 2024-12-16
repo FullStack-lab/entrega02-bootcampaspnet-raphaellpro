@@ -12,8 +12,12 @@
         <!-- Botão Editar -->
         <a href="@Url.Action("EditComment", "Topic", new { id = Model.Id })" class="btn btn-link btn-sm text-warning">Editar</a>
 
+        <!-- Botão Detalhes -->
+        <a href="@Url.Action("CommentDetail", "Topic", new { id = Model.Id })" class="btn btn-link btn-sm text-primary">Detalhes</a>
+
         <!-- Botão Excluir -->
         <a href="@Url.Action("DeleteComment", "Topic", new { id = Model.Id })" class="btn btn-link btn-sm text-danger">Excluir</a>
+
     </div>
 
     @if (Model.Replies != null && Model.Replies.Any())

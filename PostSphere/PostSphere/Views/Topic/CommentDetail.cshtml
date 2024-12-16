@@ -1,0 +1,30 @@
+﻿@model PostSphere.Models.Comment
+
+@{
+    ViewBag.Title = "Detalhes do Comentário";
+}
+
+<div class="container mt-3">
+    <h2>Detalhes do Comentário</h2>
+    <p><strong>Autor:</strong> @Model.Author</p>
+    <p><strong>Texto:</strong> @Model.Text</p>
+    <p><strong>Criado em:</strong> @Model.CreatedAt</p>
+    <p><strong>Total de Respostas:</strong> @Model.Replies.Count</p>
+
+    <hr />
+    <h3>Respostas</h3>
+
+    @if (Model.Replies != null && Model.Replies.Any())
+    {
+        <ul class="list-group">
+            @foreach (var reply in Model.Replies)
+            {
+                Html.RenderPartial("_CommentPartial", reply);
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Não há respostas para este comentário.</p>
+    }
+</div>
