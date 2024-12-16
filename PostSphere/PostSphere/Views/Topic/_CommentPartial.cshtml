@@ -10,13 +10,13 @@
     <small><strong>Por:</strong> @Model.Author | @Model.CreatedAt</small>
     <div>
         <!-- Botão Responder -->
-        <a href="@Url.Action("Reply", "Topic", new { parentId = Model.Id, topicId = topicId })" class="btn btn-link btn-sm">Responder</a>
+        <a href="@Url.Action("Reply", "Topic", new { parentId = Model.Id, topicId = topicId })" class="btn btn-sm text-bg-success">Responder</a>
 
         <!-- Botão Editar -->
-        <a href="@Url.Action("EditComment", "Topic", new { id = Model.Id })" class="btn btn-link btn-sm text-warning">Editar</a>
+        <a href="@Url.Action("EditComment", "Topic", new { id = Model.Id })" class="btn btn-link btn-sm text-primary">Editar</a>
 
         <!-- Botão Detalhes -->
-        <a href="@Url.Action("CommentDetail", "Topic", new { id = Model.Id })" class="btn btn-link btn-sm text-primary">Detalhes</a>
+        <a href="@Url.Action("CommentDetail", "Topic", new { id = Model.Id })" class="btn btn-link btn-sm text-secondary">Detalhes</a>
 
         <!-- Botão Excluir -->
         <a href="@Url.Action("DeleteComment", "Topic", new { id = Model.Id })" class="btn btn-link btn-sm text-danger">Excluir</a>
