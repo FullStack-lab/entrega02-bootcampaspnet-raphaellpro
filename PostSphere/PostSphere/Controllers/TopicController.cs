@@ -23,7 +23,7 @@ namespace PostSphere.Controllers
             new Comment { Id = 2, TopicId = 1, ParentId = 1, Author = "Carlos", Text = "Resposta ao primeiro comentário", CreatedAt = DateTime.Now },
             new Comment { Id = 3, TopicId = 1, ParentId = 1, Author = "Mariana", Text = "Outra resposta", CreatedAt = DateTime.Now },
             new Comment { Id = 4, TopicId = 2, ParentId = null, Author = "Ana", Text = "Comentário para o segundo tópico", CreatedAt = DateTime.Now }
-        }; // Simulando banco de dados
+        };
 
         // Constrói a árvore de respostas hierárquicas
         private List<Comment> BuildCommentTree(int topicId, int? parentId = null)
@@ -37,13 +37,13 @@ namespace PostSphere.Controllers
                     Author = c.Author,
                     CreatedAt = c.CreatedAt,
                     ParentId = c.ParentId,
-                    Replies = BuildCommentTree(topicId, c.Id) // Chamado recursivamente
+                    Replies = BuildCommentTree(topicId, c.Id)
                 }).ToList();
         }
 
         // Variáveis para controle de IDs únicos
-        private static int lastTopicId = 3; // Deve ser o maior ID existente na lista de tópicos
-        private static int lastCommentId = 4; // Deve ser o maior ID existente na lista de comentários
+        private static int lastTopicId = 3;
+        private static int lastCommentId = 4;
 
 
         // Action para exibir a lista de tópicos
@@ -55,7 +55,7 @@ namespace PostSphere.Controllers
                 Text = topic.Text,
                 Author = topic.Author,
                 CreatedAt = topic.CreatedAt,
-                ReplyCount = _comments.Count(c => c.TopicId == topic.Id) // Contar os comentários associados
+                ReplyCount = _comments.Count(c => c.TopicId == topic.Id)
             }).ToList();
 
             return View(topicWithReplies);
@@ -75,9 +75,9 @@ namespace PostSphere.Controllers
         {
             if (ModelState.IsValid)
             {
-                topic.Id = ++lastTopicId; // Simular auto-incremento
+                topic.Id = ++lastTopicId;
                 topic.CreatedAt = DateTime.Now;
-                topic.ReplyCount = 0; // Inicia sem respostas
+                topic.ReplyCount = 0; 
 
                 topics.Add(topic);
 
@@ -116,7 +116,7 @@ namespace PostSphere.Controllers
                 Text = comment.Text,
                 Author = comment.Author,
                 CreatedAt = comment.CreatedAt,
-                Replies = replies // Respostas diretas ao comentário
+                Replies = replies
             };
 
             return View(model);
@@ -172,8 +172,6 @@ namespace PostSphere.Controllers
 
             // Excluir os comentários associados ao tópico
             DeleteCommentsByTopicId(id);
-
-            // Remover o tópico da lista
             topics.Remove(topic);
 
             // Redirecionar para a lista de tópicos
@@ -186,7 +184,7 @@ namespace PostSphere.Controllers
             var commentsToDelete = _comments.Where(c => c.TopicId == topicId).ToList();
             foreach (var comment in commentsToDelete)
             {
-                DeleteCommentWithReplies(comment); // Chama a função recursiva para excluir o comentário e suas respostas
+                DeleteCommentWithReplies(comment);
             }
         }
 
@@ -196,7 +194,7 @@ namespace PostSphere.Controllers
             // Buscar o tópico pelo ID
             var topic = topics.FirstOrDefault(t => t.Id == id);
             if (topic == null)
-                return HttpNotFound(); // Retorna erro 404 se o tópico não existir
+                return HttpNotFound();
 
             // Busca comentários relacionados ao tópico
             var replies = _comments.Where(c => c.TopicId == id && c.ParentId == null).ToList();
@@ -208,10 +206,10 @@ namespace PostSphere.Controllers
                 Text = topic.Text,
                 Author = topic.Author,
                 CreatedAt = topic.CreatedAt,
-                Replies = BuildCommentTree(id) // Lista de respostas ao tópico principal
+                Replies = BuildCommentTree(id)
             };
 
-            return View(model); // Retorna a View com o modelo combinado
+            return View(model);
         }
 
 
