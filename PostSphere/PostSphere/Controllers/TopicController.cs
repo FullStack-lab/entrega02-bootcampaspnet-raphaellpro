@@ -69,11 +69,6 @@ namespace PostSphere.Controllers
                 topic.CreatedAt = DateTime.Now;
                 topic.ReplyCount = 0; // Inicia sem respostas
 
-                // Reduz o texto para exibição na lista
-                topic.Text = topic.Text.Length > 100
-                    ? topic.Text.Substring(0, 30) + "..."
-                    : topic.Text;
-
                 topics.Add(topic);
 
                 // Redirecionar para os detalhes do tópico criado
