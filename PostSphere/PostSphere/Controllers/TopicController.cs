@@ -12,17 +12,17 @@ namespace PostSphere.Controllers
         // Simulação de uma lista de tópicos
         private static List<Topic> topics = new List<Topic>
         {
-            new Topic { Id = 1, Text = "Descrição detalhada do problema com o sistema", Author = "Ana Souza", CreatedAt = DateTime.Now.AddHours(-5), ReplyCount = 3 },
-            new Topic { Id = 2, Text = "Sugestões iniciais de como podemos melhorar o layout", Author = "Carlos Lima", CreatedAt = DateTime.Now.AddDays(-1), ReplyCount = 7 },
-            new Topic { Id = 3, Text = "Ao tentar exportar, o sistema apresenta um erro de conexão", Author = "Mariana Silva", CreatedAt = DateTime.Now.AddMinutes(-30), ReplyCount = 1 },
+            new Topic { Id = 1, Text = "Descrição detalhada do problema com o sistema", Author = "Ana Souza", CreatedAt = DateTime.Now.AddHours(-5) },
+            new Topic { Id = 2, Text = "Sugestões iniciais de como podemos melhorar o layout", Author = "Carlos Lima", CreatedAt = DateTime.Now.AddDays(-1) },
+            new Topic { Id = 3, Text = "Ao tentar exportar, o sistema apresenta um erro de conexão", Author = "Mariana Silva", CreatedAt = DateTime.Now.AddMinutes(-30) },
         };
 
         private static List<Comment> _comments = new List<Comment>
-         {
-            new Comment { Id = 1, ParentId = null, Author = "Ana", Text = "Primeiro comentário", CreatedAt = DateTime.Now },
-            new Comment { Id = 2, ParentId = 1, Author = "Carlos", Text = "Resposta ao primeiro comentário", CreatedAt = DateTime.Now },
-            new Comment { Id = 3, ParentId = 1, Author = "Mariana", Text = "Outra resposta", CreatedAt = DateTime.Now },
-            new Comment { Id = 4, ParentId = 2, Author = "Ana", Text = "Resposta aninhada", CreatedAt = DateTime.Now }
+        {
+            new Comment { Id = 1, TopicId = 1, ParentId = null, Author = "Ana", Text = "Primeiro comentário", CreatedAt = DateTime.Now },
+            new Comment { Id = 2, TopicId = 1, ParentId = 1, Author = "Carlos", Text = "Resposta ao primeiro comentário", CreatedAt = DateTime.Now },
+            new Comment { Id = 3, TopicId = 1, ParentId = 1, Author = "Mariana", Text = "Outra resposta", CreatedAt = DateTime.Now },
+            new Comment { Id = 4, TopicId = 2, ParentId = null, Author = "Ana", Text = "Comentário para o segundo tópico", CreatedAt = DateTime.Now }
         }; // Simulando banco de dados
 
         // Constrói a árvore de respostas hierárquicas
@@ -49,8 +49,18 @@ namespace PostSphere.Controllers
         // Action para exibir a lista de tópicos
         public ActionResult TopicList()
         {
-            return View(topics);
+            var topicWithReplies = topics.Select(topic => new Topic
+            {
+                Id = topic.Id,
+                Text = topic.Text,
+                Author = topic.Author,
+                CreatedAt = topic.CreatedAt,
+                ReplyCount = _comments.Count(c => c.TopicId == topic.Id) // Contar os comentários associados
+            }).ToList();
+
+            return View(topicWithReplies);
         }
+
 
         // GET: Exibir formulário de criação
         public ActionResult CreateTopic()
