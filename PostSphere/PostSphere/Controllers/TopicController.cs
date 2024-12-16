@@ -128,6 +128,34 @@ namespace PostSphere.Controllers
             return View(topic);
         }
 
+        // Método para excluir um tópico e seus comentários associados
+        public ActionResult ConfirmDeleteTopic(int id)
+        {
+            var topic = topics.FirstOrDefault(t => t.Id == id);
+            if (topic == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Excluir os comentários associados ao tópico
+            DeleteCommentsByTopicId(id);
+
+            // Remover o tópico da lista
+            topics.Remove(topic);
+
+            // Redirecionar para a lista de tópicos
+            return RedirectToAction("TopicList");
+        }
+
+        // Método auxiliar para excluir comentários associados a um tópico
+        private void DeleteCommentsByTopicId(int topicId)
+        {
+            var commentsToDelete = _comments.Where(c => c.TopicId == topicId).ToList();
+            foreach (var comment in commentsToDelete)
+            {
+                DeleteCommentWithReplies(comment); // Chama a função recursiva para excluir o comentário e suas respostas
+            }
+        }
 
         // GET: InteractiveRoom (Página do Tópico)
         public ActionResult InteractiveRoom(int id)
