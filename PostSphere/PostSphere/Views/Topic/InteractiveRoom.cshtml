@@ -24,6 +24,8 @@
     <div>
         <!-- Link para responder -->
         <a href="@Url.Action("Reply", "Topic", new { parentId = (int?)null, topicId = Model.Id })" class="btn btn-primary mt-3">Responder</a>
+        <!-- Botão para voltar à lista de tópicos -->
+        <a href="@Url.Action("TopicList", "Topic")" class="btn btn-secondary mt-3">Voltar à Lista de Tópicos</a>
     </div>
 
     <hr />

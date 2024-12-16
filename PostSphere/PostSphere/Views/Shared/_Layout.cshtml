@@ -16,6 +16,13 @@
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <div class="navbar-collapse collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        @Html.ActionLink("Lista de Tópicos", "TopicList", "Topic", null, new { @class = "nav-link" })
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
     <div class="container body-content">
