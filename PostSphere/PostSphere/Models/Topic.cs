@@ -15,5 +15,14 @@ namespace PostSphere.Models
         public string Author { get; set; } // Autor do comentário principal
         public DateTime CreatedAt { get; set; } // Data e hora de criação
         public int ReplyCount { get; set; } // Número de respostas
+
+        public string ShortenedText
+        {
+            get
+            {
+                return Text.Length > 30 ? Text.Substring(0, 30) + "..." : Text;
+            }
+        }
+
     }
 }
