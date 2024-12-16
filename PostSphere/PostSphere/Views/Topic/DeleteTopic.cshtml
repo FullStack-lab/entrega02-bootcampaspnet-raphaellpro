@@ -2,18 +2,25 @@
 
 @{
     ViewBag.Title = "Confirmar Exclusão de Tópico";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Opcional, caso esteja usando layout compartilhado
 }
 
 <div class="container mt-5">
-    <h2 class="text-danger">Confirmar Exclusão</h2>
-    <p>Você realmente deseja excluir o seguinte tópico?</p>
+    <h2 class="text-danger">Confirmar Exclusão de Tópico</h2>
+    <p>Você realmente deseja excluir o seguinte tópico? Todos os comentários associados também serão removidos.</p>
 
     <blockquote class="blockquote">
         <p>@Model.Text</p>
         <footer class="blockquote-footer">Por @Model.Author em @Model.CreatedAt</footer>
     </blockquote>
 
-    <form method="get" action="@Url.Action("TopicList", "Topic")">
-        <button type="submit" class="btn btn-secondary">Cancelar</button>
+    <div class="alert alert-warning">
+        <strong>Aviso:</strong> A exclusão do tópico removerá todos os comentários associados de forma permanente.
+    </div>
+
+    <form method="post" action="@Url.Action("ConfirmDeleteTopic", "Topic", new { id = Model.Id })">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+        <a href="@Url.Action("TopicList", "Topic")" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
