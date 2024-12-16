@@ -145,7 +145,6 @@ namespace PostSphere.Controllers
                     return HttpNotFound();
 
                 topic.Text = editedTopic.Text;
-                topic.Author = editedTopic.Author; // Atualiza dados básicos
                 return RedirectToAction("TopicList");
             }
 
