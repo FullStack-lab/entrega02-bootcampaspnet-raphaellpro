@@ -229,6 +229,13 @@ namespace PostSphere.Controllers
                 comment.CreatedAt = DateTime.Now;
                 _comments.Add(comment);
 
+                // Atualiza o ReplyCount do tópico
+                var topic = topics.FirstOrDefault(t => t.Id == comment.TopicId);
+                if (topic != null)
+                {
+                    topic.ReplyCount = _comments.Count(c => c.TopicId == comment.TopicId);
+                }
+
                 return RedirectToAction("InteractiveRoom", new { id = comment.TopicId });
             }
 
@@ -306,6 +313,14 @@ namespace PostSphere.Controllers
 
             // Excluir o comentário e suas respostas associadas
             DeleteCommentWithReplies(comment);
+
+            // Atualiza o ReplyCount do tópico
+            var topic = topics.FirstOrDefault(t => t.Id == comment.TopicId);
+            if (topic != null)
+            {
+                topic.ReplyCount = _comments.Count(c => c.TopicId == comment.TopicId);
+
+            }
 
             // Redireciona para a página do tópico relacionado
             return RedirectToAction("InteractiveRoom", "Topic", new { id = comment.TopicId });
