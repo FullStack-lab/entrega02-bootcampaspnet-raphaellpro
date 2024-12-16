@@ -14,9 +14,19 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Text, "Texto do Comentário")
-            @Html.TextAreaFor(model => model.Text, new { @class = "form-control", rows = 5 })
+            @Html.TextAreaFor(model => model.Text, new
+            {
+                @class = "form-control",
+                rows = 5,
+                maxlength = "500",
+                data_counter = "charCount"
+            })
+            <small class="form-text text-muted">
+                Caracteres usados: <span id="charCount">@Model.Text?.Length ?? 0</span>/500
+            </small>
             @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
         </div>
+
 
         <div class="mt-3">
             <button type="submit" class="btn btn-success">Salvar Edição</button>
@@ -24,3 +34,36 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    <script>document.addEventListener("DOMContentLoaded", function () {
+            // Seleciona todos os textarea com o atributo maxlength
+            document.querySelectorAll("textarea[maxlength]").forEach(textarea => {
+                const counterId = textarea.dataset.counter;
+                if (!counterId) return; // Ignora se não houver um contador associado
+
+                const charCount = document.getElementById(counterId);
+
+                // Atualiza o contador ao carregar a página
+                const initialLength = textarea.value.length;
+                charCount.textContent = initialLength;
+
+                // Aplica a classe de alerta se necessário
+                if (initialLength >= 500) {
+                    charCount.classList.add("text-danger");
+                }
+
+                // Atualiza o contador dinamicamente enquanto o usuário digita
+                textarea.addEventListener("input", function () {
+                    const length = textarea.value.length;
+                    charCount.textContent = length;
+
+                    if (length >= 500) {
+                        charCount.classList.add("text-danger");
+                    } else {
+                        charCount.classList.remove("text-danger");
+                    }
+                });
+            });
+        });</script>
+}
