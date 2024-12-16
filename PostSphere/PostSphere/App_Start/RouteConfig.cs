@@ -59,6 +59,14 @@ namespace PostSphere
                 constraints: new { id = @"\d+" } // ID deve ser numérico
             );
 
+            routes.MapRoute(
+                name: "ConfirmDeleteTopic",
+                url: "topicos/confirmar-exclusao/{id}",
+                defaults: new { controller = "Topic", action = "ConfirmDeleteTopic" },
+                constraints: new { id = @"\d+" } // O ID deve ser numérico
+            );
+
+
             // Rota padrão
             routes.MapRoute(
                 name: "Default",
