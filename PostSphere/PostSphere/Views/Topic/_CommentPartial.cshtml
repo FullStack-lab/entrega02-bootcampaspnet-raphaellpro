@@ -3,7 +3,10 @@
 @{ var topicId = ViewData["TopicId"] ?? 0; }
 
 <li class="list-group-item">
-    <p>@Model.Text</p>
+    <div class="text-break text-start">
+        <!-- Adicionando classes para quebra de linha e alinhamento -->
+        @Model.Text
+    </div>
     <small><strong>Por:</strong> @Model.Author | @Model.CreatedAt</small>
     <div>
         <!-- Botão Responder -->
