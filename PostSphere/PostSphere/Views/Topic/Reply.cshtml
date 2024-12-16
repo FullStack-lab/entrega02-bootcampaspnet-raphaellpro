@@ -9,18 +9,47 @@
     @using (Html.BeginForm())
     {
         @Html.HiddenFor(m => m.ParentId)
-        @Html.HiddenFor(m => m.TopicId) <!-- Campo oculto para o ID do tópico -->
+        @Html.HiddenFor(m => m.TopicId)
 
         <div class="form-group">
-            @Html.Label("Autor")
-            @Html.TextBoxFor(m => m.Author, new { @class = "form-control", @required = "required" })
+            @Html.LabelFor(m => m.Author, "Nome do Autor")
+            @Html.TextBoxFor(m => m.Author, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Author, "", new { @class = "text-danger" })
         </div>
 
         <div class="form-group">
-            @Html.Label("Comentário")
-            @Html.TextAreaFor(m => m.Text, 5, 50, new { @class = "form-control", @required = "required" })
+            @Html.LabelFor(m => m.Text, "Comentário")
+            @Html.TextAreaFor(m => m.Text, 5, 50, new
+            {
+                @class = "form-control comment-input",
+                @maxlength = "500"
+            })
+            @Html.ValidationMessageFor(m => m.Text, "", new { @class = "text-danger" })
+            <small class="text-muted">
+                <span id="charCount">0</span>/500 caracteres
+            </small>
         </div>
 
         <button type="submit" class="btn btn-success mt-3">Postar Resposta</button>
     }
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const textarea = document.querySelector(".comment-input");
+            const charCount = document.getElementById("charCount");
+
+            textarea.addEventListener("input", function () {
+                const length = textarea.value.length;
+                charCount.textContent = length;
+
+                if (length >= 500) {
+                    charCount.classList.add("text-danger");
+                } else {
+                    charCount.classList.remove("text-danger");
+                }
+            });
+        });
+    </script>
+}
